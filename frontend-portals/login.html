@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ForenChain</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a1929 0%, #1a2332 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .portal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .portal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--portal-color-1), var(--portal-color-2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .portal-subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--portal-color-1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--portal-color-1), var(--portal-color-2));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .security-info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .security-info p {
+            color: #10b981;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link a:hover {
+            color: #fff;
+        }
+
+        .otp-section {
+            display: none;
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 10px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        /* Portal-specific colors */
+        .citizen-portal { --portal-color-1: #3b82f6; --portal-color-2: #2563eb; }
+        .police-portal { --portal-color-1: #ef4444; --portal-color-2: #dc2626; }
+        .forensic-portal { --portal-color-1: #8b5cf6; --portal-color-2: #7c3aed; }
+        .court-portal { --portal-color-1: #f59e0b; --portal-color-2: #d97706; }
+        .admin-portal { --portal-color-1: #10b981; --portal-color-2: #059669; }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="portal-header">
+            <div class="portal-icon" id="portalIcon">🔐</div>
+            <h2 id="portalTitle">Portal Login</h2>
+            <p class="portal-subtitle" id="portalSubtitle">Secure Two-Factor Authentication</p>
+        </div>
+
+        <div id="messageBox"></div>
+
+        <!-- Step 1: Username & Password -->
+        <form id="loginForm" class="login-section">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Enter your username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">Login</button>
+        </form>
+
+        <!-- Step 2: OTP Verification -->
+        <form id="otpForm" class="otp-section">
+            <div class="form-group">
+                <label for="otp">Enter 6-Digit OTP</label>
+                <input type="text" id="otp" class="otp-input" maxlength="6" required placeholder="000000">
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 8px;">
+                    OTP sent to your registered phone and email
+                </p>
+            </div>
+
+            <button type="submit" class="btn" id="otpBtn">Verify OTP</button>
+            <button type="button" class="btn" style="background: rgba(255,255,255,0.1); margin-top: 10px;" onclick="resendOTP()">
+                Resend OTP
+            </button>
+        </form>
+
+        <div class="security-info">
+            <p>🔒 Secured with End-to-End Encryption</p>
+            <p>⛓️ Blockchain-Verified Authentication</p>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Back to Portal Selection</a>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let otpToken = null;
+        let selectedPortal = null;
+
+        // Get portal from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        selectedPortal = urlParams.get('portal') || localStorage.getItem('selectedPortal') || 'citizen';
+
+        // Portal configurations
+        const portalConfig = {
+            citizen: { icon: '👤', title: 'Citizen Portal', class: 'citizen-portal' },
+            police: { icon: '👮', title: 'Police Portal', class: 'police-portal' },
+            forensic: { icon: '🔬', title: 'Forensic Expert Portal', class: 'forensic-portal' },
+            court: { icon: '⚖️', title: 'Court Official Portal', class: 'court-portal' },
+            admin: { icon: '⚙️', title: 'Admin Portal', class: 'admin-portal' }
+        };
+
+        // Set portal styling
+        const config = portalConfig[selectedPortal];
+        document.getElementById('loginContainer').className = `login-container ${config.class}`;
+        document.getElementById('portalIcon').textContent = config.icon;
+        document.getElementById('portalTitle').textContent = config.title;
+
+        // Step 1: Login with username/password
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, portal: selectedPortal })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                // Store OTP token
+                otpToken = data.otpToken;
+
+                // Show OTP form
+                document.querySelector('.login-section').style.display = 'none';
+                document.querySelector('.otp-section').style.display = 'block';
+                
+                showMessage('OTP sent successfully! Check your phone and email.', 'success');
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+
+        // Step 2: Verify OTP
+        document.getElementById('otpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const otp = document.getElementById('otp').value;
+            const otpBtn = document.getElementById('otpBtn');
+
+            if (otp.length !== 6) {
+                showMessage('Please enter a 6-digit OTP', 'error');
+                return;
+            }
+
+            otpBtn.disabled = true;
+            otpBtn.textContent = 'Verifying...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ otpToken, otp })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'OTP verification failed');
+                }
+
+                // Store token and user data
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('sessionId', data.sessionId);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                showMessage('Login successful! Redirecting...', 'success');
+
+                // Redirect to portal dashboard
+                setTimeout(() => {
+                    window.location.href = `dashboard-${selectedPortal}.html`;
+                }, 1500);
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                otpBtn.disabled = false;
+                otpBtn.textContent = 'Verify OTP';
+            }
+        });
+
+        function resendOTP() {
+            showMessage('OTP resent successfully!', 'success');
+            // In production, call API to resend OTP
+        }
+
+        function showMessage(message, type) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messageBox.innerHTML = '';
+            }, 5000);
+        }
+
+        // Auto-focus OTP input
+        document.getElementById('otp').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>

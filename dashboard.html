@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>ForenChain Dashboard</h1>
+        <button id="logout-btn" class="btn">Logout</button>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="upload-section">
+            <h2>Upload Evidence</h2>
+            <input type="text" id="case-id" placeholder="Case ID (e.g., CASE-2025-001)" required>
+            <input type="file" id="file-upload">
+            <button id="upload-btn" class="btn">Upload & Generate Hash</button>
+            <button id="generate-pdf" class="btn">Generate PDF Report</button>
+        </section>
+
+        <section class="evidence-list-section">
+            <h2>Evidence List</h2>
+            <input type="text" id="search-evidence" placeholder="Search Evidence">
+            <div id="evidence-list" class="evidence-list"></div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body */
+body {
+    background: #0d1b2a; /* Dark Blue */
+    color: #e0f0ff;      /* Light Blue text */
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #112240;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Auth Container */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Auth Card */
+.auth-card {
+    background: #112240;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    width: 350px;
+    text-align: center;
+}
+
+.auth-card h1 {
+    margin-bottom: 1rem;
+    color: #c0e0ff;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 5px;
+    background: #0d1b3a;
+    color: #e0f0ff;
+}
+
+input:focus, select:focus {
+    outline: 2px solid #6ea0ff;
+}
+
+button.btn {
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    background: #1b3a70;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button.btn:hover {
+    background: #3a69a3;
+}
+
+/* Hidden */
+.hidden {
+    display: none;
+}
+
+/* Tabs */
+.form-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.form-toggle button {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+    background: #0d1b3a;
+    color: #c0e0ff;
+    transition: 0.3s;
+}
+
+.form-toggle .active-tab {
+    background: #1b3a70;
+}
+
+/* Dashboard */
+.dashboard-container {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.upload-section, .evidence-list-section {
+    background: #112240;
+    padding: 1rem;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+}
+
+.evidence-list .evidence-card {
+    background: #0d2a50;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+}
+
+/* QR Code Container */
+.qr-code-container {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+}
+
+.qr-code-container canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+.qr-code-container img {
+    display: block;
+    margin: 0 auto;
+}

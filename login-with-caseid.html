@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain – Secure Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .step {
+            padding: 0.5rem 1rem;
+            background: #0d1b3a;
+            border-radius: 5px;
+            color: #6ea0ff;
+        }
+        
+        .step.active {
+            background: #1b3a70;
+            color: #fff;
+        }
+        
+        .step.completed {
+            background: #2a5a3a;
+            color: #90ee90;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .otp-input {
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 0.5rem;
+        }
+        
+        .info-box {
+            background: #1b3a70;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            color: #c0e0ff;
+        }
+        
+        .error-message {
+            background: #5a1a1a;
+            color: #ff6b6b;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: #1a5a2a;
+            color: #90ee90;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1b3a70;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>🔒 ForenChain</h1>
+            <p style="color: #6ea0ff; margin-bottom: 1.5rem;">Secure Digital Evidence Management</p>
+            
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1-indicator">Step 1: Credentials</div>
+                <div class="step" id="step2-indicator">Step 2: OTP</div>
+            </div>
+            
+            <!-- Messages -->
+            <div id="message-container"></div>
+            
+            <!-- Step 1: Login Form -->
+            <form id="login-form-step1">
+                <h3 style="color: #c0e0ff; margin-bottom: 1rem;">Enter Your Credentials</h3>
+                
+                <input 
+                    type="text" 
+                    id="case-id" 
+                    placeholder="Case ID *" 
+                    required
+                    autocomplete="off"
+                >
+                
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Username *" 
+                    required
+                    autocomplete="username"
+                >
+                
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Password *" 
+                    required
+                    autocomplete="current-password"
+                >
+                
+                <div class="info-box">
+                    <strong>🔐 Security Notice:</strong><br>
+                    • Case ID is required to access case-specific evidence<br>
+                    • OTP will be sent to your registered phone/email<br>
+                    • Account will be locked after 5 failed attempts
+                </div>
+                
+                <button type="submit" class="btn" id="step1-btn">
+                    Continue to OTP
+                </button>
+            </form>
+            
+            <!-- Step 2: OTP Verification Form -->
+            <form id="login-form-step2" class="hidden">
+                <h3 style="color: #c0e0ff; margin-bottom: 1rem;">Enter OTP</h3>
+                
+                <div class="info-box" id="otp-info">
+                    OTP has been sent to your registered contact.
+                </div>
+                
+                <input 
+                    type="text" 
+                    id="otp" 
+                    placeholder="Enter 6-digit OTP" 
+                    required
+                    maxlength="6"
+                    class="otp-input"
+                    autocomplete="off"
+                >
+                
+                <button type="submit" class="btn" id="step2-btn">
+                    Verify & Login
+                </button>
+                
+                <button type="button" class="btn" id="resend-otp-btn" style="background: #2a5a3a; margin-top: 0.5rem;">
+                    Resend OTP
+                </button>
+                
+                <button type="button" class="btn" id="back-btn" style="background: #5a3a1a; margin-top: 0.5rem;">
+                    Back to Step 1
+                </button>
+            </form>
+            
+            <p style="margin-top: 1.5rem; color: #6ea0ff;">
+                <a href="#" id="help-link" style="color: #6ea0ff;">Need Help?</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE_URL = 'http://localhost:3001/api';
+        
+        // State management
+        let currentUserId = null;
+        let currentCaseId = null;
+        let otpAttempts = 0;
+        
+        // DOM Elements
+        const step1Form = document.getElementById('login-form-step1');
+        const step2Form = document.getElementById('login-form-step2');
+        const step1Indicator = document.getElementById('step1-indicator');
+        const step2Indicator = document.getElementById('step2-indicator');
+        const messageContainer = document.getElementById('message-container');
+        const step1Btn = document.getElementById('step1-btn');
+        const step2Btn = document.getElementById('step2-btn');
+        const resendOtpBtn = document.getElementById('resend-otp-btn');
+        const backBtn = document.getElementById('back-btn');
+        
+        // Show message
+        function showMessage(message, type = 'error') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageDiv);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+        
+        // Show loading state
+        function setLoading(button, isLoading) {
+            if (isLoading) {
+                button.disabled = true;
+                button.innerHTML = '<span class="loading"></span> Processing...';
+            } else {
+                button.disabled = false;
+                button.innerHTML = button.id === 'step1-btn' ? 'Continue to OTP' : 'Verify & Login';
+            }
+        }
+        
+        // Switch to Step 2
+        function goToStep2() {
+            step1Form.classList.add('hidden');
+            step2Form.classList.remove('hidden');
+            step1Indicator.classList.remove('active');
+            step1Indicator.classList.add('completed');
+            step2Indicator.classList.add('active');
+            document.getElementById('otp').focus();
+        }
+        
+        // Switch back to Step 1
+        function goToStep1() {
+            step2Form.classList.add('hidden');
+            step1Form.classList.remove('hidden');
+            step2Indicator.classList.remove('active');
+            step1Indicator.classList.remove('completed');
+            step1Indicator.classList.add('active');
+            messageContainer.innerHTML = '';
+            currentUserId = null;
+            currentCaseId = null;
+        }
+        
+        // Step 1: Submit credentials and Case ID
+        step1Form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const caseId = document.getElementById('case-id').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!caseId || !username || !password) {
+                showMessage('All fields are required', 'error');
+                return;
+            }
+            
+            setLoading(step1Btn, true);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login-step1`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password, caseId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUserId = data.userId;
+                    currentCaseId = caseId;
+                    
+                    showMessage('OTP sent successfully! Check your phone/email.', 'success');
+                    
+                    setTimeout(() => {
+                        goToStep2();
+                    }, 1000);
+                } else {
+                    showMessage(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Network error. Please check your connection.', 'error');
+            } finally {
+                setLoading(step1Btn, false);
+            }
+        });
+        
+        // Step 2: Verify OTP
+        step2Form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const otp = document.getElementById('otp').value.trim();
+            
+            if (!otp || otp.length !== 6) {
+                showMessage('Please enter a valid 6-digit OTP', 'error');
+                return;
+            }
+            
+            setLoading(step2Btn, true);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login-step2`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        userId: currentUserId, 
+                        otp, 
+                        caseId: currentCaseId 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store authentication data
+                    localStorage.setItem('forenchain_token', data.token);
+                    localStorage.setItem('forenchain_session', data.sessionToken);
+                    localStorage.setItem('forenchain_user', JSON.stringify(data.user));
+                    
+                    showMessage('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect to role-specific dashboard
+                    setTimeout(() => {
+                        window.location.href = getDashboardUrl(data.user.role);
+                    }, 1500);
+                } else {
+                    otpAttempts++;
+                    showMessage(data.message || 'Invalid OTP', 'error');
+                    
+                    if (otpAttempts >= 3) {
+                        showMessage('Too many failed attempts. Please request a new OTP.', 'error');
+                        document.getElementById('otp').disabled = true;
+                    }
+                }
+            } catch (error) {
+                console.error('OTP verification error:', error);
+                showMessage('Network error. Please try again.', 'error');
+            } finally {
+                setLoading(step2Btn, false);
+            }
+        });
+        
+        // Resend OTP
+        resendOtpBtn.addEventListener('click', async () => {
+            if (!currentUserId) return;
+            
+            resendOtpBtn.disabled = true;
+            resendOtpBtn.textContent = 'Sending...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/resend-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: currentUserId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('OTP resent successfully!', 'success');
+                    otpAttempts = 0;
+                    document.getElementById('otp').disabled = false;
+                    document.getElementById('otp').value = '';
+                } else {
+                    showMessage(data.message || 'Failed to resend OTP', 'error');
+                }
+            } catch (error) {
+                console.error('Resend OTP error:', error);
+                showMessage('Network error. Please try again.', 'error');
+            } finally {
+                resendOtpBtn.disabled = false;
+                resendOtpBtn.textContent = 'Resend OTP';
+            }
+        });
+        
+        // Back button
+        backBtn.addEventListener('click', goToStep1);
+        
+        // Get dashboard URL based on role
+        function getDashboardUrl(role) {
+            const dashboards = {
+                'citizen': 'citizen-dashboard.html',
+                'police': 'police-dashboard.html',
+                'forensic': 'forensic-dashboard.html',
+                'court': 'court-dashboard.html',
+                'admin': 'admin-dashboard.html'
+            };
+            
+            return dashboards[role] || 'dashboard.html';
+        }
+        
+        // Auto-format OTP input
+        document.getElementById('otp').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+        });
+        
+        // Help link
+        document.getElementById('help-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('For assistance, please contact:\n\nEmail: support@forenchain.com\nPhone: +1-800-FORENSIC\n\nIf you forgot your Case ID, contact your case administrator.');
+        });
+    </script>
+</body>
+</html>

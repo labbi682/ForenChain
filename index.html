@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain – Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>ForenChain</h1>
+            <div class="form-toggle">
+                <button id="login-tab" class="active-tab">Login</button>
+                <button id="signup-tab">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="Username" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <input type="text" id="login-caseid" placeholder="Case ID (e.g., CASE-2025-001)" required>
+                <select id="login-role">
+                    <option value="investigator">Investigator</option>
+                    <option value="admin">Admin</option>
+                    <option value="court">Court</option>
+                </select>
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" class="hidden">
+                <input type="text" id="signup-username" placeholder="Username" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <input type="text" id="signup-caseid" placeholder="Case ID (e.g., CASE-2025-001)" required>
+                <select id="signup-role">
+                    <option value="investigator">Investigator</option>
+                    <option value="admin">Admin</option>
+                    <option value="court">Court</option>
+                </select>
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+
+            <p id="auth-message"></p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

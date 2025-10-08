@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain Case ID Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>🔒 ForenChain Case ID Demo</h1>
+            
+            <div style="background: #1b3a70; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #c0e0ff;">
+                <h3>📋 Demo Credentials</h3>
+                <p><strong>Case ID:</strong> CASE-2025-001</p>
+                <p><strong>Username:</strong> john_doe</p>
+                <p><strong>Password:</strong> password123</p>
+                <p><strong>Role:</strong> Police Officer</p>
+                <p><strong>OTP:</strong> 123456 (demo)</p>
+            </div>
+            
+            <div style="background: #2a5a3a; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #90ee90;">
+                <h3>🔐 How Case ID Authentication Works:</h3>
+                <ol>
+                    <li><strong>Step 1:</strong> Enter Case ID + Username + Password</li>
+                    <li><strong>Validation:</strong> System checks:
+                        <ul>
+                            <li>User exists and is active</li>
+                            <li>Password is correct</li>
+                            <li>Case ID exists and is active</li>
+                            <li>User has access to this specific case</li>
+                            <li>User's KYC is verified</li>
+                        </ul>
+                    </li>
+                    <li><strong>Step 2:</strong> OTP sent to registered phone/email</li>
+                    <li><strong>Step 3:</strong> Enter 6-digit OTP to complete login</li>
+                    <li><strong>Access:</strong> User gets case-specific dashboard</li>
+                </ol>
+            </div>
+            
+            <div style="background: #5a1a1a; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #ff6b6b;">
+                <h3>⚠️ Security Features:</h3>
+                <ul>
+                    <li>Account lockout after 5 failed attempts (30 min)</li>
+                    <li>Rate limiting (10 attempts per 15 min per IP)</li>
+                    <li>OTP expires in 10 minutes</li>
+                    <li>Maximum 3 OTP attempts</li>
+                    <li>Session expires in 8 hours</li>
+                    <li>All actions logged for audit</li>
+                </ul>
+            </div>
+            
+            <a href="login-with-caseid.html" class="btn" style="display: block; text-align: center; text-decoration: none; margin-top: 1rem;">
+                🚀 Try Case ID Login
+            </a>
+            
+            <div style="margin-top: 2rem; color: #6ea0ff;">
+                <h3>📊 API Endpoints Available:</h3>
+                <ul style="text-align: left; font-family: monospace; font-size: 0.9rem;">
+                    <li>POST /api/auth/register</li>
+                    <li>POST /api/auth/login-step1</li>
+                    <li>POST /api/auth/login-step2</li>
+                    <li>POST /api/auth/resend-otp</li>
+                    <li>POST /api/auth/logout</li>
+                    <li>GET /api/auth/verify-session</li>
+                    <li>POST /api/cases/create</li>
+                    <li>POST /api/cases/assign-user</li>
+                    <li>GET /api/cases/my-cases</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

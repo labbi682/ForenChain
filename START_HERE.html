@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain - Start Here</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a1929 0%, #1a2332 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+        }
+
+        .btn-large {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            text-decoration: none;
+            padding: 20px 50px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-large:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .feature p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .note {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+            color: #10b981;
+        }
+
+        .demo-mode {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 30px;
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🔐</div>
+        <h1>ForenChain</h1>
+        <p class="subtitle">Blockchain-Powered Secure Evidence Management System</p>
+
+        <a href="frontend-portals/index.html" class="btn-large">
+            🚀 Launch ForenChain
+        </a>
+
+        <div class="demo-mode">
+            <strong>⚡ Demo Mode Active</strong><br>
+            The system is running in demo mode. Full backend features require MongoDB and Node.js setup.
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">👤</div>
+                <h3>Citizen Portal</h3>
+                <p>Upload and track your evidence submissions</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">👮</div>
+                <h3>Police Portal</h3>
+                <p>Verify and manage evidence</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔬</div>
+                <h3>Forensic Portal</h3>
+                <p>Analyze evidence and submit reports</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⚖️</div>
+                <h3>Court Portal</h3>
+                <p>Access verified evidence records</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⚙️</div>
+                <h3>Admin Portal</h3>
+                <p>Manage system and approve evidence</p>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>🔒 Security Features:</strong><br>
+            ✓ KYC Verification • ✓ Two-Factor Authentication • ✓ Role-Based Access Control<br>
+            ✓ Blockchain Storage • ✓ Encrypted Files • ✓ Complete Audit Logs
+        </div>
+
+        <div style="margin-top: 40px; color: #64748b; font-size: 0.9rem;">
+            <p><strong>To run full system with backend:</strong></p>
+            <p>1. Install MongoDB and Node.js</p>
+            <p>2. Run: <code style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px;">cd backend && npm install && npm run dev</code></p>
+            <p>3. Open the portal interface</p>
+        </div>
+    </div>
+</body>
+</html>

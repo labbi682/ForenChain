@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenChain - Secure Evidence Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a1929 0%, #1a2332 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--portal-color-1), var(--portal-color-2));
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .portal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--portal-color-1), var(--portal-color-2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .portal-title {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .portal-description {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .portal-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .portal-features li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .portal-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--portal-color-1);
+            font-weight: bold;
+        }
+
+        .portal-btn {
+            background: linear-gradient(135deg, var(--portal-color-1), var(--portal-color-2));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .portal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Portal-specific colors */
+        .citizen-portal {
+            --portal-color-1: #3b82f6;
+            --portal-color-2: #2563eb;
+        }
+
+        .police-portal {
+            --portal-color-1: #ef4444;
+            --portal-color-2: #dc2626;
+        }
+
+        .forensic-portal {
+            --portal-color-1: #8b5cf6;
+            --portal-color-2: #7c3aed;
+        }
+
+        .court-portal {
+            --portal-color-1: #f59e0b;
+            --portal-color-2: #d97706;
+        }
+
+        .admin-portal {
+            --portal-color-1: #10b981;
+            --portal-color-2: #059669;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        .security-badge-icon {
+            font-size: 24px;
+        }
+
+        .security-badge-text {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .portals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🔐</div>
+                <div>
+                    <h1>ForenChain</h1>
+                    <p class="tagline">Blockchain-Powered Secure Evidence Management System</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="portals-grid">
+            <!-- Citizen Portal -->
+            <div class="portal-card citizen-portal" onclick="openPortal('citizen')">
+                <div class="portal-icon">👤</div>
+                <h2 class="portal-title">Citizen Portal</h2>
+                <p class="portal-description">Upload and track your evidence submissions</p>
+                <ul class="portal-features">
+                    <li>Upload evidence files</li>
+                    <li>View your submissions</li>
+                    <li>Track case status</li>
+                    <li>Receive notifications</li>
+                </ul>
+                <button class="portal-btn">Enter Citizen Portal</button>
+            </div>
+
+            <!-- Police Portal -->
+            <div class="portal-card police-portal" onclick="openPortal('police')">
+                <div class="portal-icon">👮</div>
+                <h2 class="portal-title">Police Portal</h2>
+                <p class="portal-description">Verify and manage evidence submissions</p>
+                <ul class="portal-features">
+                    <li>View all evidence</li>
+                    <li>Verify submissions</li>
+                    <li>Transfer to forensics</li>
+                    <li>Generate reports</li>
+                </ul>
+                <button class="portal-btn">Enter Police Portal</button>
+            </div>
+
+            <!-- Forensic Expert Portal -->
+            <div class="portal-card forensic-portal" onclick="openPortal('forensic')">
+                <div class="portal-icon">🔬</div>
+                <h2 class="portal-title">Forensic Expert Portal</h2>
+                <p class="portal-description">Analyze evidence and submit reports</p>
+                <ul class="portal-features">
+                    <li>View assigned cases</li>
+                    <li>Conduct analysis</li>
+                    <li>Submit findings</li>
+                    <li>Update reports</li>
+                </ul>
+                <button class="portal-btn">Enter Forensic Portal</button>
+            </div>
+
+            <!-- Court Official Portal -->
+            <div class="portal-card court-portal" onclick="openPortal('court')">
+                <div class="portal-icon">⚖️</div>
+                <h2 class="portal-title">Court Official Portal</h2>
+                <p class="portal-description">Access verified evidence records</p>
+                <ul class="portal-features">
+                    <li>View approved evidence</li>
+                    <li>Download court reports</li>
+                    <li>Verify authenticity</li>
+                    <li>Read-only access</li>
+                </ul>
+                <button class="portal-btn">Enter Court Portal</button>
+            </div>
+
+            <!-- Admin Portal -->
+            <div class="portal-card admin-portal" onclick="openPortal('admin')">
+                <div class="portal-icon">⚙️</div>
+                <h2 class="portal-title">Admin Portal</h2>
+                <p class="portal-description">Manage system and approve evidence</p>
+                <ul class="portal-features">
+                    <li>Manage users & KYC</li>
+                    <li>Approve evidence</li>
+                    <li>View audit logs</li>
+                    <li>System configuration</li>
+                </ul>
+                <button class="portal-btn">Enter Admin Portal</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <div class="security-badge">
+                <span class="security-badge-icon">🔒</span>
+                <span class="security-badge-text">Secured with KYC Verification • Two-Factor Authentication • Private Blockchain</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPortal(portalType) {
+            // Store portal type for login page
+            localStorage.setItem('selectedPortal', portalType);
+            // Redirect to login page
+            window.location.href = `login.html?portal=${portalType}`;
+        }
+    </script>
+</body>
+</html>
